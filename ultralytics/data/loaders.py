@@ -345,10 +345,13 @@ class LoadImagesAndVideos:
         images, videos = [], []
         for f in files:
             suffix = f.split(".")[-1].lower()  # Get file extension without the dot and lowercase
-            if suffix in IMG_FORMATS:
+            tmp = f.split(".")[-2][-3:] == "tmp" ##ignore if tmp at end of filename
+            if suffix in IMG_FORMATS and not tmp:
                 images.append(f)
-            elif suffix in VID_FORMATS:
+            elif suffix in VID_FORMATS and not tmp:
                 videos.append(f)
+            if tmp:
+                LOGGER.warning(f"tmp: {tmp}")
         ni, nv = len(images), len(videos)
 
         self.files = images + videos
